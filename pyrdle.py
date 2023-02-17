@@ -118,7 +118,7 @@ def wrong_position(result: str, words: List) -> List:
 def right_position(result: str, words: List) -> List:
     valid = []
     for word in words:
-        if is_right_position(word, result):
+        if is_right_position(result, word):
             valid.append(word)
 
     return valid
