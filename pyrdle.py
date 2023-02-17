@@ -10,10 +10,15 @@ present a set of word to pick from.
 
 from typing import List, Set
 
+# TODO: add help
+#       add info
+
 
 def main():
     print("Wordle Solver")
-    print("Key: a for yellow, A for locked, . for any)")
+    print("   For result: lowercase for yellow")
+    print("               uppercase for green")
+    print("               . for not found")
     print("")
 
     with open("words.txt") as f:

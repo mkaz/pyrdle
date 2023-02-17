@@ -36,3 +36,4 @@ def test_is_right_pos():
     assert pyrdle.is_right_position("..AR.", "stare") == True
     assert pyrdle.is_right_position("aSstE", "stare") == False
     assert pyrdle.is_right_position(".....", "stare") == True
+    assert pyrdle.is_right_position(".h..E", "heavy") == False
