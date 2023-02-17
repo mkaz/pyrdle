@@ -31,26 +31,26 @@ def main():
         result = input("Result : ")
         print("")
 
-        result = result.strip()
-        empty = result.replace(".", "")
-
+        # Remove all words that have invalid letters
         # 1. What letters are invalid
         #    Using Python sets get the difference between guess/result
         #    This returns all letters in guess not in result
         invalid = set(guess).difference(result.lower())
-
-        # Remove all words that have invalid letters
         words = remove_invalid(invalid, words)
+        print(f"Words after invalid: {len(words)}")
 
-        if empty != "":
-            # Remove words without required characters
-            words = only_required(result, words)
+        # Remove words without required characters
+        required = result.replace(".", "").lower()
+        words = only_required(required, words)
+        print(f"Words after required: {len(words)}")
 
-            # Remove words with correct letter but wrong position
-            words = wrong_position(result, words)
+        # Remove words with correct letter but wrong position
+        words = wrong_position(result, words)
+        print(f"Words after wrong pos: {len(words)}")
 
-            # Remove words with correct letter and right position
-            words = right_position(result, words)
+        # Remove words with correct letter and right position
+        words = right_position(result, words)
+        print(f"Words after right pos: {len(words)}")
 
         # Suggest 10 Words
         print(f"Words remaining {len(words)}")
@@ -71,8 +71,7 @@ def remove_invalid(invalid: Set, words: List) -> List:
 
     # loop through list words
     for word in words:
-        # is intersection empty set
-        if set(word).intersection(invalid) == set():
+        if has_valid_chars(word, invalid):
             valid.append(word)
 
     return valid
@@ -84,20 +83,9 @@ def remove_invalid(invalid: Set, words: List) -> List:
 def only_required(required: str, words: List) -> List:
     valid = []
 
-    # remove . and lower
-    required = required.replace(".", "").lower()
-
     # loop through words
     for word in words:
-        # intersection is not empty means that the word
-        # does contain a letter from required
-        # so need to loop both since all letters are required
-        # break if one character is produces empty
-        k = True
-        for ch in required:
-            if set(word).intersection(ch) == set():
-                k = False
-        if k:
+        if has_required(word, required):
             valid.append(word)
 
     return valid
@@ -110,11 +98,9 @@ def only_required(required: str, words: List) -> List:
 #   - then loop over words add words that don't have
 def wrong_position(result: str, words: List) -> List:
     valid = []
-    for i, ch in enumerate(result):
-        if ch.islower():
-            for word in words:
-                if word[i] != ch:
-                    valid.append(word)
+    for word in words:
+        if not is_wrong_position(result, word):
+            valid.append(word)
 
     return set(valid)  # makes unique
 
@@ -126,13 +112,54 @@ def wrong_position(result: str, words: List) -> List:
 #   - then loop over words add words that have same
 def right_position(result: str, words: List) -> List:
     valid = []
-    for i, ch in enumerate(result):
-        if ch.isupper():
-            for word in words:
+    for word in words:
+        for i, ch in enumerate(result):
+            if ch.isupper():
                 if word[i] == ch.lower():
                     valid.append(word)
 
     return set(valid)  # makes unique
+
+
+# Checks if word contains only valid chars
+# - chars passed in are invalid
+def has_valid_chars(word: str, chars: str) -> bool:
+    # if the intersection is empty then no invalid
+    if set(word).intersection(chars) == set():
+        return True
+
+    # contains an invalid
+    return False
+
+
+# Checks if word contains all required chars
+def has_required(word: str, chars: str) -> bool:
+    # Nothing required
+    if chars == "":
+        return True
+
+    # intersection is not empty means that the word does contain a letter from
+    # required so need to loop both since all letters are required break if one
+    # character is produces empty
+    for ch in chars:
+        if set(word).intersection(ch) == set():
+            return False
+
+    return True
+
+
+# Checks word for characters in result that are in the wrong position
+# Right letter. Wrong position.
+#   - iterate over result
+#   - only check lowercase letters
+#   - confirm word does not have letter there
+def is_wrong_position(result: str, word: str) -> bool:
+    for i, ch in enumerate(result):
+        if ch.islower():
+            if word[i] == ch:
+                return True
+
+    return False
 
 
 if __name__ == "__main__":
