@@ -102,7 +102,7 @@ def wrong_position(result: str, words: List) -> List:
         if not is_wrong_position(result, word):
             valid.append(word)
 
-    return set(valid)  # makes unique
+    return valid
 
 
 # Remove words that do not have letter in the right pos.
@@ -113,12 +113,10 @@ def wrong_position(result: str, words: List) -> List:
 def right_position(result: str, words: List) -> List:
     valid = []
     for word in words:
-        for i, ch in enumerate(result):
-            if ch.isupper():
-                if word[i] == ch.lower():
-                    valid.append(word)
+        if is_right_position(word, result):
+            valid.append(word)
 
-    return set(valid)  # makes unique
+    return valid
 
 
 # Checks if word contains only valid chars
@@ -148,7 +146,7 @@ def has_required(word: str, chars: str) -> bool:
     return True
 
 
-# Checks word for characters in result that are in the wrong position
+# Checks word for characters in result are in the wrong position
 # Right letter. Wrong position.
 #   - iterate over result
 #   - only check lowercase letters
@@ -160,6 +158,22 @@ def is_wrong_position(result: str, word: str) -> bool:
                 return True
 
     return False
+
+
+# Checks word for characters in result are in the right position
+# Right letter. Right position.
+#   - iterate over result
+#   - only check uppercase letters
+#   - confirm word has letter there
+#   - confirm all letters, not just first
+def is_right_position(result: str, word: str) -> bool:
+    k = True
+    for i, ch in enumerate(result):
+        if ch.isupper():
+            if word[i] != ch.lower():
+                k = False
+
+    return k
 
 
 if __name__ == "__main__":

@@ -16,10 +16,23 @@ def test_has_required_chars():
 
 
 def test_is_wrong_pos():
+    # second param is word checking
     assert pyrdle.is_wrong_position("..a..", "stare") == True
     assert pyrdle.is_wrong_position(".a...", "stare") == False
     assert pyrdle.is_wrong_position("s...e", "stare") == True
+    assert pyrdle.is_wrong_position("g...e", "stare") == True
     assert pyrdle.is_wrong_position(".....", "stare") == False
     assert pyrdle.is_wrong_position("arste", "stare") == True
     assert pyrdle.is_wrong_position("arset", "stare") == False
     assert pyrdle.is_wrong_position("..A..", "stare") == False
+
+
+def test_is_right_pos():
+    # second param is word checking
+    assert pyrdle.is_right_position("..A..", "stare") == True
+    assert pyrdle.is_right_position(".a...", "stare") == True
+    assert pyrdle.is_right_position("A....", "stare") == False
+    assert pyrdle.is_right_position(".T..A", "stare") == False
+    assert pyrdle.is_right_position("..AR.", "stare") == True
+    assert pyrdle.is_right_position("aSstE", "stare") == False
+    assert pyrdle.is_right_position(".....", "stare") == True
