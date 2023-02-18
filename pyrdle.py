@@ -10,10 +10,7 @@ present a set of word to pick from.
 
 import argparse
 from typing import List
-
-# TODO: add args
-#            --help
-#            --info
+import sys
 
 
 def main():
@@ -63,12 +60,20 @@ ctrl-c to exit
         print(f"Words: {len(words)}")
     print()
 
-        # gather result
-        #    .  - letter not in word
-        #    a  - lowercase letter in word wrong pos
-        #    A  - uppercase letter in word right pos
-        result = input("Result : ")
-        print("")
+    for _ in range(6):  # how many guesses/loops
+        # gather guess
+        try:
+            guess = input("Your guess? ")
+
+            # gather result
+            #    .  - letter not in word
+            #    a  - lowercase letter in word wrong pos
+            #    A  - uppercase letter in word right pos
+            result = input("Result : ")
+            print("")
+        except KeyboardInterrupt:
+            print("")
+            sys.exit()
 
         # Remove all words that have invalid letters
         # 1. What letters are invalid
