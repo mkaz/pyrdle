@@ -8,10 +8,11 @@ or words using a sieve to eliminate invalid words and then
 present a set of word to pick from.
 """
 
-from typing import List, Set
+from typing import List
 
-# TODO: add help
-#       add info
+# TODO: add args
+#            --help
+#            --info
 
 
 def main():
@@ -71,7 +72,7 @@ def main():
 #   - Loop through list of words
 #   - Check if word contains any letters in invalid string
 #   - If the word does not it is good append to valid list
-def remove_invalid(invalid: Set, words: List) -> List:
+def remove_invalid(invalid: str, words: List) -> List:
     valid = []
 
     # loop through list words
