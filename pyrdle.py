@@ -8,6 +8,7 @@ or words using a sieve to eliminate invalid words and then
 present a set of word to pick from.
 """
 
+import argparse
 from typing import List
 
 # TODO: add args
@@ -16,19 +17,51 @@ from typing import List
 
 
 def main():
-    print("Wordle Solver")
-    print("   For result: lowercase for yellow")
-    print("               uppercase for green")
-    print("               . for not found")
-    print("")
+    parser = argparse.ArgumentParser(
+        prog="pyrdle",
+        description="A Wordle Solver in Python",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+
+EXAMPLE
+---------------------------
+
+Enter your guess first.
+
+For result:
+    use lowercase for yellow letters
+    use uppercase for green letters
+    use . for not found
+
+Example: If the clue is "snake"
+
+You guess: great
+Enter result as: ..ea.
+
+Next guess: place
+Enter result as: ..A.E
+
+Next guess: shake
+Enter result as: S.AKE
+
+
+ctrl-c to exit
+""",
+    )
+
+    parser.add_argument("--info", action="store_true")
+    args = parser.parse_args()
+
+    print("---------------")
+    print(" Wordle Solver")
+    print("---------------")
 
     with open("words.txt") as f:
         words = [x.strip() for x in f]
 
-    print(f"Words: {len(words)}")
-    for _ in range(6):
-        # gather guess
-        guess = input("Your guess? ")
+    if args.info:
+        print(f"Words: {len(words)}")
+    print()
 
         # gather result
         #    .  - letter not in word
@@ -43,23 +76,27 @@ def main():
         #    This returns all letters in guess not in result
         invalid = set(guess).difference(result.lower())
         words = remove_invalid(invalid, words)
-        print(f"Words after invalid: {len(words)}")
+        if args.info:
+            print(f"Words after invalid: {len(words)}")
 
         # Remove words without required characters
         required = result.replace(".", "").lower()
         words = only_required(required, words)
-        print(f"Words after required: {len(words)}")
+        if args.info:
+            print(f"Words after required: {len(words)}")
 
         # Remove words with correct letter but wrong position
         words = wrong_position(result, words)
-        print(f"Words after wrong pos: {len(words)}")
+        if args.info:
+            print(f"Words after wrong pos: {len(words)}")
 
         # Remove words with correct letter and right position
         words = right_position(result, words)
-        print(f"Words after right pos: {len(words)}")
+        if args.info:
+            print(f"Words after right pos: {len(words)}")
 
         # Suggest 10 Words
-        print(f"Words remaining {len(words)}")
+        print("Suggestions...")
         for i, word in enumerate(words):
             print(f"    {word}")
             if i > 4:
